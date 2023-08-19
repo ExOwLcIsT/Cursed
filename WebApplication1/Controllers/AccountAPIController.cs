@@ -6,63 +6,49 @@ using Cursed.Models;
 
 namespace Cursed.Controllers
 {
-    public class AccountController : Controller
+    public class AccountAPIController : Controller
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly GameContext _context;
         Random ConfirmCode = new Random();
-        public AccountController(SignInManager<User> signInManager, UserManager<User> userManager, RoleManager<IdentityRole> roleManager, GameContext context)
+        public AccountAPIController(SignInManager<User> signInManager, UserManager<User> userManager, RoleManager<IdentityRole> roleManager, GameContext context)
         {
             this._signInManager = signInManager;
             this._userManager = userManager;
             this._roleManager = roleManager;
             this._context = context;
         }
-        [HttpGet]
-        public IActionResult Login()
-        {
-            return View();
-        }
+        [Route("api/account/login")]
         [HttpPost]
-        public async Task<IActionResult> Login(LoginViewModel loginViewModel)
+        public async Task<bool> Login([FromBody] LoginViewModel loginViewModel)
         {
             try
             {
-                var res = await _signInManager.PasswordSignInAsync(loginViewModel.Email, loginViewModel.Password, true, false);
-                if (res.Succeeded)
-                {
-                    return RedirectToAction("Index", "Home");
-                }
+                Console.WriteLine(loginViewModel.UserName);
+                var res = await _signInManager.PasswordSignInAsync(loginViewModel.UserName, loginViewModel.Password, true, false);
+                return res.Succeeded;
             }
             catch (Exception e)
             {
-
+                Console.WriteLine(e.Message);
+                return false;
             }
-            return View("Error"
-              );
         }
-        [HttpGet]
-        public IActionResult Register()
-        {
-            return View();
-        }
+        [Route("api/account/register")]
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
+        public async Task<bool> Register([FromBody] RegisterViewModel registerViewModel)
         {
             var user = new User()
             {
-                Email = registerViewModel.Email,
-                UserName = registerViewModel.Email,
-                Password = registerViewModel.Password,
-                PhoneNumber = registerViewModel.PhoneNumber
+                UserName = registerViewModel.UserName,
+                Password = registerViewModel.Password
             };
 
             IdentityResult res = await _userManager.CreateAsync(user, registerViewModel.Password);
-            if (res.Succeeded)
-                return View("Inxed");
-            return View();
+
+            return res.Succeeded;
         }
 
         [HttpGet]

@@ -1,34 +1,27 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="~/css/site.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="~/js/microsoft/signalr/dist/browser/signalr.js"></script>
+    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
 </head>
 
 <body>
-    <div id="pfp1" ></div>
-    <div id="pfp2"></div>
-    @*div clas="nick" id="nick1" HorizontalAlignment="Left" Margin="102,23,0,0" TextWrapping="Wrap" Text="Player1"
-         VerticalAlignment="Top" Height="17" Width="124"></div>
-    <div class="border" Visibility="Hidden" id="bord1" Margin="10,10,538,630"></div>
-    <div class="border" id="Pfp2Border" CornerRadius="50" Margin="665,10,10,649" BorderThickness="5" Width="75px"
-         Height="75px">
+    <div id="p1">
+        <input id="login" type="text" placeholder="username" />
+        <input id="password" type="password" placeholder="password" />
+        <input id="loginbtn" type="button" value="log in" />
+        <input id="registerbtn" type="button" value="registration" />
+        <input id="offlinebtn" type="button" value="play locally" />
     </div>
-    <div clas="nick" Visibility="Visible" id="nick2" HorizontalAlignment="Right" Margin="0,23,102,0"
-         VerticalAlignment="Top" Height="17" Width="124">
-        Player2
+    <div id="p2">
+        <input id="cid" type="text" placeholder="enemy connction id" />
+        <input id="connectbtn" type="button" value="connect" />
     </div>
-    <div class="border" id="bord2" Margin="538,10,10,630">
-    </div>    
-    <div clas="nick" Name="test" HorizontalAlignment="Left" Margin="482,141,0,0" VerticalAlignment="Top" Width="120">
-    </div>*@
     <table id="table" Width="500" Height="500">
         @for (int i = 0; i < 10; i++)
         {
@@ -36,14 +29,13 @@
                 @for (int j = 0; j < 10; j++)
                 {
                     <td id="x @j y @i" onclick="addPfP(@j,@i)">
-
                     </td>
                 }
             </tr>
         }
-    </table>   
-    <script src="~/js/microsoft/signalr/dist/browser/signalr.js"></script>
-    <script src="~/js/site.js"></script>
+    </table>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
 </body>
 
 </html>
