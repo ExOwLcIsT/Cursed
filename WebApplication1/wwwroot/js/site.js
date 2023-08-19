@@ -2,7 +2,7 @@
 var enemy = ""
 var online = true;
 $("#connectbtn").on('click', () => {
-    enemy = $("#cid").val()
+    enemy = $("#enemyid").val()
 })
 //Disable the send button until connection is established.
 
@@ -14,6 +14,7 @@ connection.on("ReceiveMessage", function (x, y) {
 });
 connection.on("ReceiveConnectionId", function (s) {
     $("#cid").text(s)
+    console.log(s)
 });
 
 connection.start()
@@ -108,8 +109,7 @@ let player1code = `
 <div class="nick" id="nick1">
     Player 1
         </div>
-        <div class="cid" id="cid">
-   
+        <div class="cid" id="cid">   
         </div>`
 let player2code = `
 <div class="pic" id="pic2"></div>
