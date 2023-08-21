@@ -40,7 +40,7 @@ function addPfP(x, y) {
             return console.error(err.toString());
         });
     }
-    checkField(x, y, `<div class="chip pl1" ></div>`);
+    checkField(x, y);
 } function addEnemyPfP(x, y) {
     document.getElementById(`x ${x} y ${y}`).innerHTML = `<div class="chip pl2" ></div>`;
     $(`#x ${x} y ${y}`).on('click', () => { });
@@ -51,24 +51,34 @@ function addPfP(x, y) {
             }
         }
     }
-    checkField(x, y, `<div class="chip pl2" ></div>`);
+    checkField(x, y);
 }
-function checkField(x, y, playercode) {
+function win() {
+    for (let i = 0; i < 10; i++) {
+        for (let j = 0; j < 10; j++) {
+            document.getElementById(`x ${j} y ${i}`).style.pointerEvents = 'none';
+        }
+    }
+    console.log("win");
+    alert("win");
+}
+function checkField(x, y) {
     let countToWin = 1;
     let x1 = x - 1, y1 = y - 1;
     //перевірка по діагоналі (ліво верх)
-
-    while (x1 >= 0 && y1 >= 0 && $(`#x ${x1} y ${y1}`).html() == playercode) {
+    let thisplayer = document.getElementById(`x ${x} y ${y}`).innerHTML;
+    console.log(thisplayer)
+    while (x1 >= 0 && y1 >= 0 && document.getElementById(`x ${x1} y ${y1}`).innerHTML === thisplayer) {
         countToWin++;
-        if (countToWin == 5) { console.log("win") }
+        if (countToWin == 5) {  }
         x1--;
         y1--;
     }
     x1 = x + 1;
     y1 = y + 1;
-    while (x1 <= 9 && y1 <= 9 && $(`#x ${x1} y ${y1}`).html() == playercode) {
+    while (x1 <= 9 && y1 <= 9 && document.getElementById(`x ${x1} y ${y1}`).innerHTML === thisplayer) {
         countToWin++;
-        if (countToWin == 5) { console.log("win") }
+        if (countToWin == 5) { win() }
 
         x1++;
         y1++;
@@ -77,17 +87,17 @@ function checkField(x, y, playercode) {
     countToWin = 1;
     x1 = x + 1;
     y1 = y - 1;
-    while (x1 <= 9 && y1 >= 0 && $(`#x ${x1} y ${y1}`).html() == playercode) {
+    while (x1 <= 9 && y1 >= 0 && document.getElementById(`x ${x1} y ${y1}`).innerHTML === thisplayer) {
         countToWin++;
-        if (countToWin == 5) { console.log("win") }
+        if (countToWin == 5) { win() }
         x1++;
         y1--;
     }
     x1 = x - 1;
     y1 = y + 1;
-    while (x1 >= 0 && y1 <= 9 && $(`#x ${x1} y ${y1}`).html() == playercode) {
+    while (x1 >= 0 && y1 <= 9 && document.getElementById(`x ${x1} y ${y1}`).innerHTML === thisplayer) {
         countToWin++;
-        if (countToWin == 5) { console.log("win") }
+        if (countToWin == 5) { win() }
         x1--;
         y1++;
     }
@@ -95,30 +105,30 @@ function checkField(x, y, playercode) {
     countToWin = 1;
     x1 = x;
     y1 = y - 1;
-    while (y1 >= 0 && $(`#x ${x1} y ${y1}`).html() == playercode) {
+    while (y1 >= 0 && document.getElementById(`x ${x1} y ${y1}`).innerHTML === thisplayer) {
         countToWin++;
-        if (countToWin == 5) { console.log("win") }
+        if (countToWin == 5) { win() }
         y1--;
     }
     y1 = y + 1;
-    while (y1 <= 9 && $(`#x ${x1} y ${y1}`).html() == playercode) {
+    while (y1 <= 9 && document.getElementById(`x ${x1} y ${y1}`).innerHTML === thisplayer) {
         countToWin++;
-        if (countToWin == 5) { console.log("win") }
+        if (countToWin == 5) { win() }
         y1++;
     }
     //перевірка по горизонталі
     countToWin = 1;
     x1 = x - 1;
     y1 = y;
-    while (x1 >= 0 && $(`#x ${x1} y ${y1}`).html() == playercode) {
+    while (x1 >= 0 && document.getElementById(`x ${x1} y ${y1}`).innerHTML === thisplayer) {
         countToWin++;
-        if (countToWin == 5) { console.log("win") }
+        if (countToWin == 5) { win() }
         x1--;
     }
     x1 = x + 1;
-    while (x1 <= 9 && $(`#x ${x1} y ${y1}`).html() == playercode) {
+    while (x1 <= 9 && document.getElementById(`x ${x1} y ${y1}`).innerHTML === thisplayer) {
         countToWin++;
-        if (countToWin == 5) { console.log("win") }
+        if (countToWin == 5) { win() }
         x1++;
     };
 }
