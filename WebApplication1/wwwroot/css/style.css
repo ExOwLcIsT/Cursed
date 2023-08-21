@@ -94,6 +94,14 @@ footer {
     background-image: url("../images/Default_pfp.jpg");
 }
 
+.pl1 {
+    border: 2px blue solid;
+}
+
+.pl2 {
+    border: 2px red solid;
+}
+
 #cid {
     width: 500px;
 }

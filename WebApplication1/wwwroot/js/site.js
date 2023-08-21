@@ -1,8 +1,9 @@
 ﻿var connection = new signalR.HubConnectionBuilder().withUrl("/gameHub").build();
 var enemy = ""
+var me = ""
 var online = true;
 $("#connectbtn").on('click', () => {
-    enemy = $("#enemyid").val()
+    connection.invoke("checkId", me, $("#enemyid").val());
 })
 //Disable the send button until connection is established.
 
@@ -10,21 +11,118 @@ $("#connectbtn").on('click', () => {
 //    document.getElementById(`x ${x} y ${y}`).innerHTML = `<div class="chip pl2" ></div>`
 //});
 connection.on("ReceiveMessage", function (x, y) {
-    addPfP(x, y)
+    addEnemyPfP(x, y)
+});
+connection.on("CheckId", function (f) {
+    if (f) {
+        enemy = $("#enemyid").val();
+        $("#p2").html(player2code);
+    }
 });
 connection.on("ReceiveConnectionId", function (s) {
     $("#cid").text(s)
+    me = s;
     console.log(s)
 });
 
 connection.start()
 function addPfP(x, y) {
-    document.getElementById(`x ${x} y ${y}`).innerHTML = `<div class="chip pl1" ></div>`
-    if (online)
+    document.getElementById(`x ${x} y ${y}`).innerHTML = `<div class="chip pl1" ></div>`;
+    $(`#x ${x} y ${y}`).on('click', () => { });
+    if (online) {
+        for (let i = 0; i < 10; i++) {
+            for (let j = 0; j < 10; j++) {
+                document.getElementById(`x ${j} y ${i}`).style.pointerEvents = 'none';
+            }
+        }
+
         connection.invoke("sendMessage", String(x), String(y), enemy).catch(function (err) {
             return console.error(err.toString());
         });
+    }
+    checkField(x, y, `<div class="chip pl1" ></div>`);
+} function addEnemyPfP(x, y) {
+    document.getElementById(`x ${x} y ${y}`).innerHTML = `<div class="chip pl2" ></div>`;
+    $(`#x ${x} y ${y}`).on('click', () => { });
+    if (online) {
+        for (let i = 0; i < 10; i++) {
+            for (let j = 0; j < 10; j++) {
+                document.getElementById(`x ${j} y ${i}`).style.pointerEvents = 'auto';
+            }
+        }
+    }
+    checkField(x, y, `<div class="chip pl2" ></div>`);
 }
+function checkField(x, y, playercode) {
+    let countToWin = 1;
+    let x1 = x - 1, y1 = y - 1;
+    //перевірка по діагоналі (ліво верх)
+
+    while (x1 >= 0 && y1 >= 0 && $(`#x ${x1} y ${y1}`).html() == playercode) {
+        countToWin++;
+        if (countToWin == 5) { console.log("win") }
+        x1--;
+        y1--;
+    }
+    x1 = x + 1;
+    y1 = y + 1;
+    while (x1 <= 9 && y1 <= 9 && $(`#x ${x1} y ${y1}`).html() == playercode) {
+        countToWin++;
+        if (countToWin == 5) { console.log("win") }
+
+        x1++;
+        y1++;
+    }
+    //перевірка по діагоналі (право верх)
+    countToWin = 1;
+    x1 = x + 1;
+    y1 = y - 1;
+    while (x1 <= 9 && y1 >= 0 && $(`#x ${x1} y ${y1}`).html() == playercode) {
+        countToWin++;
+        if (countToWin == 5) { console.log("win") }
+        x1++;
+        y1--;
+    }
+    x1 = x - 1;
+    y1 = y + 1;
+    while (x1 >= 0 && y1 <= 9 && $(`#x ${x1} y ${y1}`).html() == playercode) {
+        countToWin++;
+        if (countToWin == 5) { console.log("win") }
+        x1--;
+        y1++;
+    }
+    //перевірка по вертикалі
+    countToWin = 1;
+    x1 = x;
+    y1 = y - 1;
+    while (y1 >= 0 && $(`#x ${x1} y ${y1}`).html() == playercode) {
+        countToWin++;
+        if (countToWin == 5) { console.log("win") }
+        y1--;
+    }
+    y1 = y + 1;
+    while (y1 <= 9 && $(`#x ${x1} y ${y1}`).html() == playercode) {
+        countToWin++;
+        if (countToWin == 5) { console.log("win") }
+        y1++;
+    }
+    //перевірка по горизонталі
+    countToWin = 1;
+    x1 = x - 1;
+    y1 = y;
+    while (x1 >= 0 && $(`#x ${x1} y ${y1}`).html() == playercode) {
+        countToWin++;
+        if (countToWin == 5) { console.log("win") }
+        x1--;
+    }
+    x1 = x + 1;
+    while (x1 <= 9 && $(`#x ${x1} y ${y1}`).html() == playercode) {
+        countToWin++;
+        if (countToWin == 5) { console.log("win") }
+        x1++;
+    };
+}
+
 $("#offlinebtn").on('click', () => {
     online = false
     $("#p1").html(player1code)
