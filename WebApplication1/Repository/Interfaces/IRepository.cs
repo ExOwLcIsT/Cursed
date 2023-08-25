@@ -7,8 +7,10 @@ namespace Cursed.Repository.Interfaces
     {
         Task<IReadOnlyCollection<TEntity>> GetAllAsync();
         Task<IReadOnlyCollection<TEntity>> FindByConditionAsync(Expression<Func<TEntity, bool>> expression);
-        Task CreateAsync(TEntity entity);
+        Task<bool> Exists(Expression<Func<TEntity, bool>> expression);
+        Task AddAsync(TEntity entity);
         Task<TEntity> FirstAsync(Expression<Func<TEntity, bool>> expression);
              Task DeleteAsync(Expression<Func<TEntity, bool>> expression);
+        Task SaveAsync();
     }
 }

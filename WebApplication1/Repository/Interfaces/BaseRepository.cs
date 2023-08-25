@@ -13,12 +13,19 @@ namespace Cursed.Repository.Interfaces
         public BaseRepository(GameContext context) => _context = context;
 
 
-        public async Task CreateAsync(TEntity entity) => await this.Entities.AddAsync(entity).ConfigureAwait(false);
+        public async Task AddAsync(TEntity entity) => await this.Entities.AddAsync(entity).ConfigureAwait(false);
 
         public virtual async Task<IReadOnlyCollection<TEntity>> FindByConditionAsync(Expression<Func<TEntity, bool>> expression) => await this.Entities.Where(expression).ToListAsync().ConfigureAwait(false);
         public virtual async Task<TEntity> FirstAsync(Expression<Func<TEntity, bool>> expression) => await this.Entities.FirstAsync(expression).ConfigureAwait(false);
         public virtual async Task<IReadOnlyCollection<TEntity>> GetAllAsync() => await this.Entities.ToListAsync().ConfigureAwait(false);
 
         public virtual async Task DeleteAsync(Expression<Func<TEntity, bool>> expression) => this.Entities.Remove(await FirstAsync(expression));
+
+        public virtual async Task<bool> Exists(Expression<Func<TEntity, bool>> expression) => await this.Entities.AnyAsync(expression);
+
+        public async Task SaveAsync() => await _context.SaveChangesAsync().ConfigureAwait(false);
+
+
+
     }
 }

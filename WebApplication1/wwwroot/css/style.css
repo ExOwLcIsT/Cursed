@@ -8,7 +8,7 @@
 html, body {
     height: 100%;
     width: 100%;
-    background: linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(152,16,16,1) 100%, rgba(0,212,255,1) 100%);
+    background: linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(152,16,16,1) 100%, #FF0000 100%);
 }
 
 .container {
@@ -16,6 +16,10 @@ html, body {
     width: 100%;
     position: relative;
     max-width: 100%;
+}
+
+label {
+    display: inline-block;
 }
 
 #p1 {
@@ -26,7 +30,7 @@ html, body {
 }
 
     #p1
-    input {
+    input, label {
         width: 300px;
         margin: 5px auto;
         background-color: transparent;
@@ -42,7 +46,7 @@ html, body {
 }
 
     #p2
-    input {
+    input, label {
         width: 300px;
         margin: 5px auto;
         background-color: transparent;
@@ -89,19 +93,26 @@ footer {
 .chip {
     border-radius: 50%;
     background-size: cover;
-    width: 100%;
-    height: 100%;
+    width: calc(100% - 4px);
+    height: calc(100% - 4px);
     background-image: url("../images/Default_pfp.jpg");
 }
 
 .pl1 {
-    border: 2px blue solid;
+    border-width: 2px;
+    border-color: blue;
+    border-style: solid;
 }
 
 .pl2 {
-    border: 2px red solid;
+    border-width: 2px;
+    border-color: red;
+    border-style: solid;
 }
 
 #cid {
-    width: 500px;
+    width: 300px;
+}
+#registererror, #loginerror {
+    background-color: red;
 }
