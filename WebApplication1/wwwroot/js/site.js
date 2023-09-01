@@ -7,34 +7,61 @@ var enemyColor = 'red';
 var userPicture = "../images/Default_pfp.jpg";
 var enemyPicture = "../images/Default_pfp.jpg";
 var currentStep = 1;
-for (let i = 0; i < 10; i++) {
-    for (let j = 0; j < 10; j++) {
-        document.getElementById(`x ${j} y ${i}`).style.pointerEvents = 'none';
+connection.start()
+function block() {
+    for (let i = 0; i < 10; i++) {
+        for (let j = 0; j < 10; j++) {
+            document.getElementById(`x ${j} y ${i}`).style.pointerEvents = 'none';
+        }
+    }
+}
+function unblock() {
+    for (let i = 0; i < 10; i++) {
+        for (let j = 0; j < 10; j++) {
+            document.getElementById(`x ${j} y ${i}`).style.pointerEvents = 'auto';
+        }
     }
 }
 $("#connectbtn").on('click', () => {
-    connection.invoke("checkId", userConnectionid, $("#enemyid").val());
+    connection.invoke("checkId", userConnectionid, $("#enemyid").val(), userPicture, $("#nick1").text());
 })
 connection.on("ReceiveStep", function (x, y) {
     addEnemyPfP(x, y)
+    currentStep = 1;
 });
-connection.on("CheckId", function (f) {
-    if (f) {
-        enemy = $("#enemyid").val();
-        $("#p2").html(player2code);
-        online = true;
-        cleanField();
-    }
+connection.on("CheckId", function () {
+    enemy = $("#enemyid").val();
+    $("#p2").html(player2code);
+    online = true;
+    cleanField();
+    connection.invoke("getMove", userConnectionid, enemy);
 });
 connection.on("ReceiveConnectionId", function (s) {
     $("#cid").text(s)
     userConnectionid = s;
-});
 
-connection.start()
+});
+connection.on("ReceiveMove", function (s) {
+    currentStep = s;
+    if (currentStep === 2)
+        block()
+    else
+        unblock();
+});
+connection.on("ReceiveEnemy", function (pfp, nick, fl, en) {
+    $("#p2").html(player2code);
+    enemyPicture = pfp;
+    enemy = en;
+    online = true;
+    $("#nick2").text(nick)
+    $("#pic2").css('background-image', `url(${enemyPicture})`);
+    if (fl === true)
+        connection.invoke("sendEnemy", userConnectionid, enemy, userPicture, $("#nick1").text());
+});
 function addPfP(x, y) {
     if (currentStep === 2) {
         addEnemyPfP(x, y)
+        currentStep = 1;
         return;
     }
     document.getElementById(`x ${x} y ${y}`).innerHTML = `<div class="chip pl1"  style = "border-color:${userColor};"></div>`;
@@ -42,38 +69,27 @@ function addPfP(x, y) {
     $(".pl1").css('background-image', `url(${userPicture})`);
     $(`#x ${x} y ${y}`).on('click', () => { });
     if (online) {
-        for (let i = 0; i < 10; i++) {
-            for (let j = 0; j < 10; j++) {
-                document.getElementById(`x ${j} y ${i}`).style.pointerEvents = 'none';
-            }
-        }
+        block()
         connection.invoke("sendMessage", String(x), String(y), enemy).catch(function (err) {
             return console.error(err.toString());
         });
     }
-    checkField(x, y);
     currentStep = 2;
+    checkField(x, y);
 } function addEnemyPfP(x, y) {
     document.getElementById(`x ${x} y ${y}`).innerHTML = `<div class="chip pl2"></div>`;
     $(`#x ${x} y ${y}`).on('click', () => { });
+    $(".pl2").css('background-image', `url(${enemyPicture})`);
     if (online) {
-        for (let i = 0; i < 10; i++) {
-            for (let j = 0; j < 10; j++) {
-                document.getElementById(`x ${j} y ${i}`).style.pointerEvents = 'auto';
-            }
-        }
+        unblock()
     }
-    checkField(x, y);
     currentStep = 1;
+    checkField(x, y);
 }
 function win() {
-    for (let i = 0; i < 10; i++) {
-        for (let j = 0; j < 10; j++) {
-            document.getElementById(`x ${j} y ${i}`).style.pointerEvents = 'none';
-        }
-    }
+    block()
     let vinner = $("#nick" + currentStep).text()
-    alert(vinner + "has won")
+    alert(vinner + " has won")
 }
 function checkField(x, y) {
     let countToWin = 1;
@@ -150,11 +166,7 @@ $("#offlinebtn").on('click', () => {
     $("#p1").html(player1code)
     $("#p2").html(player2code)
     $("#idhint").hide()
-    for (let i = 0; i < 10; i++) {
-        for (let j = 0; j < 10; j++) {
-            document.getElementById(`x ${j} y ${i}`).style.pointerEvents = 'auto';
-        }
-    }
+    unblock()
 })
 $("#loginbtn").on('click', loginuser)
 function setSkin(userName) {
@@ -195,20 +207,13 @@ function loginuser() {
             if (data.success) {
                 $("#p1").html(player1code)
                 $("#nick1").text(l)
-                console.log(l)
                 setSkin(l);
-                for (let i = 0; i < 10; i++) {
-                    for (let j = 0; j < 10; j++) {
-                        document.getElementById(`x ${j} y ${i}`).style.pointerEvents = 'auto';
-                    }
-                }
+                unblock()
                 connection.invoke("GetConnectionId", "tur").catch(function (err) {
                     return console.error(err.toString());
                 });
             }
             else {
-                console.log(data.errorMessage);
-                console.log($("#loginerror").get());
                 $("#loginerror").html(data.errorMessage)
             }
         },
@@ -244,15 +249,10 @@ function registeruser() {
                 "content-type": "application/json;odata=verbose"
             },
             success: function (data) {
-                if (data.success)
-                {
+                if (data.success) {
                     $("#p1").html(player1code)
                     $("#nick1").html(l)
-                    for (let i = 0; i < 10; i++) {
-                        for (let j = 0; j < 10; j++) {
-                            document.getElementById(`x ${j} y ${i}`).style.pointerEvents = 'auto';
-                        }
-                    }
+                    unblock()
                     $.ajax({
                         async: true,
                         url: "/api/account/addpicture",
