@@ -34,5 +34,11 @@ namespace Cursed.Hubs
         {
             await Clients.Client(checkId).SendAsync("ReceiveEnemy", pfp, nick, false, myId);
         }
+        public async Task SendVictory(string myId, string checkId, string vinner)
+        {
+            Console.WriteLine("asdasdasd");
+            await Clients.Client(checkId).SendAsync("ReceiveVictory", vinner);
+            await Clients.Client(myId).SendAsync("ReceiveVictory", vinner);
+        }
     }
 }
