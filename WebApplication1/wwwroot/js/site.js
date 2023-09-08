@@ -103,7 +103,7 @@ function checkField(x, y) {
         if (countToWin == 5) {
             if (online) {
                 connection.invoke("sendVictory", userConnectionid, enemy, $("#nick" + (3 - currentStep)).text())
-            } else ($("#nick" + 3 - currentStep)).text();
+            } else win($("#nick" + (3 - currentStep)).text());
         }
         x1--;
         y1--;
@@ -115,7 +115,7 @@ function checkField(x, y) {
         if (countToWin == 5) {
             if (online) {
                 connection.invoke("sendVictory", userConnectionid, enemy, $("#nick" + (3 - currentStep)).text())
-            } else ($("#nick" + 3 - currentStep)).text();
+            } else win($("#nick" + (3 - currentStep)).text());
         }
 
         x1++;
@@ -130,7 +130,7 @@ function checkField(x, y) {
         if (countToWin == 5) {
             if (online) {
                 connection.invoke("sendVictory", userConnectionid, enemy, $("#nick" + (3 - currentStep)).text())
-            } else ($("#nick" + 3 - currentStep)).text();
+            } else win($("#nick" + (3 - currentStep)).text());
         }
         x1++;
         y1--;
@@ -139,7 +139,10 @@ function checkField(x, y) {
     y1 = y + 1;
     while (x1 >= 0 && y1 <= 9 && document.getElementById(`x ${x1} y ${y1}`).innerHTML === thisplayer) {
         countToWin++;
-        if (countToWin == 5) { if (online) { connection.invoke("sendVictory", userConnectionid, enemy, $("#nick" + (3 - currentStep)).text()) } else ($("#nick" + 3 - currentStep)).text(); }
+        if (countToWin == 5) {
+            if (online) { connection.invoke("sendVictory", userConnectionid, enemy, $("#nick" + (3 - currentStep)).text()) }
+            else win($("#nick" + (3 - currentStep)).text());
+        }
         x1--;
         y1++;
     }
@@ -149,13 +152,19 @@ function checkField(x, y) {
     y1 = y - 1;
     while (y1 >= 0 && document.getElementById(`x ${x1} y ${y1}`).innerHTML === thisplayer) {
         countToWin++;
-        if (countToWin == 5) { if (online) { connection.invoke("sendVictory", userConnectionid, enemy, $("#nick" + (3 - currentStep)).text()) } else ($("#nick" + 3 - currentStep)).text(); }
+        if (countToWin == 5) {
+            if (online) { connection.invoke("sendVictory", userConnectionid, enemy, $("#nick" + (3 - currentStep)).text()) }
+            else win($("#nick" + (3 - currentStep)).text());
+        }
         y1--;
     }
     y1 = y + 1;
     while (y1 <= 9 && document.getElementById(`x ${x1} y ${y1}`).innerHTML === thisplayer) {
         countToWin++;
-        if (countToWin == 5) { if (online) { connection.invoke("sendVictory", userConnectionid, enemy, $("#nick" + (3 - currentStep)).text()) } else ($("#nick" + 3 - currentStep)).text(); }
+        if (countToWin == 5) {
+            if (online) { connection.invoke("sendVictory", userConnectionid, enemy, $("#nick" + (3 - currentStep)).text()) }
+            else win($("#nick" + (3 - currentStep)).text());
+        }
         y1++;
     }
     //перевірка по горизонталі
@@ -164,13 +173,19 @@ function checkField(x, y) {
     y1 = y;
     while (x1 >= 0 && document.getElementById(`x ${x1} y ${y1}`).innerHTML === thisplayer) {
         countToWin++;
-        if (countToWin == 5) { if (online) { connection.invoke("sendVictory", userConnectionid, enemy, $("#nick" + (3 - currentStep)).text()) } else ($("#nick" + 3 - currentStep)).text(); }
+        if (countToWin == 5) {
+            if (online) { connection.invoke("sendVictory", userConnectionid, enemy, $("#nick" + (3 - currentStep)).text()) }
+            else win($("#nick" + (3 - currentStep)).text());
+        }
         x1--;
     }
     x1 = x + 1;
     while (x1 <= 9 && document.getElementById(`x ${x1} y ${y1}`).innerHTML === thisplayer) {
         countToWin++;
-        if (countToWin == 5) { if (online) { connection.invoke("sendVictory", userConnectionid, enemy, $("#nick" + (3 - currentStep)).text()) } else ($("#nick" + 3 - currentStep)).text(); }
+        if (countToWin == 5) {
+            if (online) { connection.invoke("sendVictory", userConnectionid, enemy, $("#nick" + (3 - currentStep)).text()) }
+            else win($("#nick" + (3 - currentStep)).text());
+        }
         x1++;
     };
 }
