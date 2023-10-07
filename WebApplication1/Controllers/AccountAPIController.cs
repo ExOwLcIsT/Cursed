@@ -27,7 +27,7 @@ namespace Cursed.Controllers
             try
             {
                 var res = await _signInManager.PasswordSignInAsync(loginViewModel.UserName, loginViewModel.Password, true, false);
-                RequestResult result = new RequestResult()
+                RequestResult result = new()
                 {
                     Success = res.Succeeded,
                 };
@@ -76,39 +76,34 @@ namespace Cursed.Controllers
             };
 
             IdentityResult res = await _userManager.CreateAsync(user, registerViewModel.Password);
-            RequestResult result = new RequestResult()
+            RequestResult result = new()
             {
                 Success = res.Succeeded,
             };
             if (!res.Succeeded)
             {
-              
-                    result.ErrorMessage += res.Errors.First().Description ?? "" + "<br/>";
-                
+                result.ErrorMessage += res.Errors.First().Description ?? "" + "<br/>";
             }
             return result;
         }
-        [Route("api/account/addpicture")]
-        [HttpPost]
+        [HttpPost("api/account/addpicture")]
         public async Task AddPicture([FromForm] IFormFile ff, [FromForm] string user)
         {
             var us = await _userManager.FindByNameAsync(user);
             if (ff != null)
             {
-
                 string fullpath;
                 var filename = $"/{Guid.NewGuid()}." + ff.FileName.Split('.').Last();
                 fullpath = _webHostEnvironment.WebRootPath + "/images" + filename;
-                using (FileStream fs = new FileStream(fullpath, FileMode.Create))
+                using (FileStream fs = new(fullpath, FileMode.Create))
                 {
                     await ff.CopyToAsync(fs);
                 }
-
                 us.ImagePath = "../images" + filename;
             }
             await _userManager.UpdateAsync(us);
         }
-        [HttpGet]
+        [HttpGet("api/account/logout")]
         public void Logout()
         {
             _signInManager.SignOutAsync();

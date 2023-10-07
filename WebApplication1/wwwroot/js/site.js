@@ -1,4 +1,5 @@
 ﻿var connection = new signalR.HubConnectionBuilder().withUrl("/gameHub").build();
+connection.start()
 var enemy = ""
 var userConnectionid = ""
 var online = false;
@@ -7,7 +8,7 @@ var enemyColor = 'red';
 var userPicture = "../images/Default_pfp.jpg";
 var enemyPicture = "../images/Default_pfp.jpg";
 var currentStep = 1;
-connection.start()
+block()
 function block() {
     for (let i = 0; i < 10; i++) {
         for (let j = 0; j < 10; j++) {
@@ -37,6 +38,7 @@ connection.on("CheckId", function () {
     connection.invoke("getMove", userConnectionid, enemy);
 });
 connection.on("ReceiveConnectionId", function (s) {
+    $("#idhint").show();
     $("#cid").text(s)
     userConnectionid = s;
 });
@@ -323,13 +325,12 @@ function preparelogin() {
     $("#loginbtn").on('click', loginuser)
 }
 let player1code = `
-<div class="pic" id="pic1"></div>
-<div class="nick" id="nick1">
-    Player 1
+        <div class="pic" id="pic1"></div>
+        <div class="nick" id="nick1">
+        Player 1
         </div>
         <label id = 'idhint'>Your connection Id (give it to another player)</label>
-        <div class="cid" id="cid">   
-        </div>`
+        <div class="cid" id="cid"></div>`
 let player2code = `
 <div class="pic" id="pic2"></div>
 <div class="nick" id="nick2">
@@ -366,3 +367,30 @@ function cleanField() {
         }
     }
 }
+function logOut() {
+    $.ajax({
+        async: true,
+        url: "/api/account/logout",
+        method: "GET",
+        headers: {
+            "content-type": "application/json;odata=verbose"
+        },
+        success: function () {
+            $("#p1").html(logincode);
+        },
+        error: function (error) { console.log("error: " + JSON.stringify(error)); }
+    }
+    );
+}
+function getId() {
+    connection.invoke("GetConnectionId", "tur").catch(function (err) {
+        return console.error(err.toString());
+    });
+    $("#getid").hide();
+}
+window.onload = (event) => {
+    if ($("#nick1").length)
+    {
+        setSkin($("#nick1").text());
+    }
+};

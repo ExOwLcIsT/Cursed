@@ -1,10 +1,11 @@
-﻿<!DOCTYPE html>
+﻿
+@model Cursed.Models.UserViewModel;
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Tic Tac Ten</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="~/js/microsoft/signalr/dist/browser/signalr.js"></script>
     <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
@@ -12,12 +13,32 @@
 
 <body>
     <div id="p1">
-        <input id="login" type="text" placeholder="username" />
-        <input id="password" type="password" placeholder="password" />
-        <input id="loginbtn" type="button" value="log in" />
-        <input id="registerbtn" type="button" value="registration" />
-        <input id="offlinebtn" type="button" value="play locally" />
-        <label id='loginerror'></label>
+        @if (Model == null)
+        {
+            <input id="login" type="text" placeholder="username" />
+            <input id="password" type="password" placeholder="password" />
+            <input id="loginbtn" type="button" value="log in" />
+            <input id="registerbtn" type="button" value="registration" />
+            <input id="offlinebtn" type="button" value="play locally" />
+            <label id='loginerror'></label>
+        }
+        else
+        {
+            <div class="pic" id="pic1" style='background-image: url(@Model.ImagePath)'></div>
+            <div class="nick" id="nick1">
+                @Model.UserName
+            </div>
+            <label id='idhint' style="visibility:hidden;">Your connection Id (give it to another player)</label>
+            <div class="cid" id="cid"></div>
+            <input type="button" id="getid" value="Get connectionID" onclick="getId()" />
+
+            <input type="button" id="logoutbtn" value="Log out" onclick="logOut()" />
+            @using (Html.BeginForm("changer", "skin", FormMethod.Get))
+            {
+                <input type="hidden" value="@Model.UserName" name="uname">
+                <input type="submit" id="skinbtn" value="Change skin" />
+            }
+        }
     </div>
     <div id="p2">
         <input id="enemyid" type="text" placeholder="enemy connection id" />
@@ -36,7 +57,7 @@
         }
     </table>
     <footer>Project was made by ExOwLcIsT</footer>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script async src="~/js/site.js" asp-append-version="true"></script>
 </body>
 
 </html>

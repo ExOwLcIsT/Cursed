@@ -1,0 +1,33 @@
+﻿@model SkinViewModel
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Change your skin</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
+</head>
+<body>
+    <div id="p1">
+        @using (Html.BeginForm("save", "skin", FormMethod.Post))
+        {
+            <input asp-for="UserName" type="hidden" value="@Model.UserName" />
+            <input asp-for="Id" type="hidden" value="@Model.Id" />
+            <label>Choose your new profile picture</label>
+            <input id="pfpinput" type="file" accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*">
+            <label>Choose your chip's border color</label>
+            <input asp-for="BorderColor" id="borderclr" type="color" value="@Model.BorderColor" />
+            <label>Choose your field's color</label>
+            <input asp-for="FieldColor" id="fieldclr" type="color" value="@Model.FieldColor" />
+            <label>Choose your background color</label>
+            <input asp-for="BackgroundColor" id="backgroundclr" type="color" value="@Model.BackgroundColor" />
+            <input id="save" type="submit" value="save changes" />
+        }
+        @using (Html.BeginForm("index", "home", FormMethod.Get))
+        {
+            <input id="return" type="submit" value="return to main page" />
+        }
+    </div>
+    <script src="~/js/skin.js"></script>
+</body>
+</html>

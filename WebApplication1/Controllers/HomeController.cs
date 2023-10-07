@@ -1,14 +1,26 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Cursed.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace Cursed.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly UserManager<User> _userManager;
+        public HomeController(UserManager<User> userManager)
+        { 
+            _userManager = userManager;
+        }
+        [HttpGet]
         public IActionResult Index()
         {
-            return View();
+            if (User.Identity.IsAuthenticated)
+                return View(new UserViewModel() { UserName = User.Identity.Name, ImagePath = _userManager.FindByNameAsync(User.Identity.Name).Result.ImagePath });
+            else
+            {
+                return View();
+            }
         }
 
         public IActionResult Privacy()

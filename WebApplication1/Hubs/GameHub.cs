@@ -1,7 +1,4 @@
-﻿using Cursed.Context;
-using Cursed.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.SignalR;
 
 namespace Cursed.Hubs
 {
@@ -25,7 +22,7 @@ namespace Cursed.Hubs
         }
         public async Task GetMove(string myId, string enemyId)
         {
-            Random a = new Random();
+            Random a = new();
             int m = a.Next(1, 3);
             await Clients.Client(myId).SendAsync("ReceiveMove", m);
             await Clients.Client(enemyId).SendAsync("ReceiveMove", 3 - m);

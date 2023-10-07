@@ -23,9 +23,8 @@ namespace Cursed.Repository.Interfaces
 
         public virtual async Task<bool> Exists(Expression<Func<TEntity, bool>> expression) => await this.Entities.AnyAsync(expression);
 
-        public async Task SaveAsync() => await _context.SaveChangesAsync().ConfigureAwait(false);
+        public virtual async Task SaveAsync() => await _context.SaveChangesAsync().ConfigureAwait(false);
 
-
-
+        public virtual async Task Update(TEntity entity) => this.Entities.Update(entity);
     }
 }

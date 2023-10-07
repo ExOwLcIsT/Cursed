@@ -21,7 +21,7 @@ namespace Cursed.Controllers
         [HttpGet("getskin")]
         public async Task<SkinModelToSend> GetSkin(string userName)
         {
-            var us = await _userManager.FindByNameAsync(userName);
+            var us = await _userManager.FindByNameAsync(userName.Trim());
             var res = await _skinRepository.FirstAsync(x => x.Id == us.SkinId);
             return new SkinModelToSend()
             {
